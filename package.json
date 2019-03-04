@@ -33,6 +33,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongodb": "^3.1.13",
+    "mongoose": "^5.4.16",
     "morgan": "^1.9.1",
     "winston": "^3.2.1"
   }

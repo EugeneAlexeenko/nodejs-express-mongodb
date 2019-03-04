@@ -1,52 +1,46 @@
-import { MongoClient } from 'mongodb';
-import logger from '../logger';
+import CityModel from '../models/CityModel';
 import citiesToInsert from '../mockCities';
 
-const url = process.env.MONGO_URL;
-const dbName = process.env.MONGO_DB_NAME;
-
-const findAllCities = async () => {
-  let client;
-  let db;
-  let collection;
-  let cities;
-
-  try {
-    client = await MongoClient.connect(url, { useNewUrlParser: true });
-    db = client.db(dbName);
-    collection = db.collection('cities');
-    cities = await collection.find().toArray();
-  } catch (err) {
-    logger.error(err);
-  }
-
-  return cities;
-};
-
-const getRandomNumberFromZeroToMax = max => Math.floor(Math.random() * Math.floor(max));
-const getRandomItemFromArray = items => items[getRandomNumberFromZeroToMax(items.length)];
-
 const insertMockCities = async (req, res) => {
-  let client;
-  let db;
-  let collection;
-
   try {
-    client = await MongoClient.connect(url, { useNewUrlParser: true });
-    db = client.db(dbName);
-    collection = db.collection('cities');
-  } catch (err) {
-    logger.error(err);
-  }
-
-  try {
-    const insertResult = await collection.insertMany(citiesToInsert);
-    logger.info(`Inserted ${insertResult.insertedCount} documents into the collection`);
+    await CityModel.insertMany(citiesToInsert);
     res.status(201).json({
       message: 'Mock cities has been inserted',
     });
   } catch (error) {
-    logger.error(error);
+    res.status(500).json({
+      message: 'Server error',
+      error: error.message,
+    });
+  }
+};
+
+const createCity = async (req, res) => {
+  const newCity = new CityModel(req.body);
+
+  try {
+    const insertedCity = await newCity.save();
+    res.status(201).json({
+      message: 'City has been created',
+      data: insertedCity.result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Server error',
+      error: error.message,
+    });
+  }
+};
+
+const getAllCities = async (req, res) => {
+  try {
+    const cities = await CityModel.find({});
+
+    res.status(200).json({
+      message: 'Cities received',
+      data: cities,
+    });
+  } catch (error) {
     res.status(500).json({
       message: 'Server error',
       error: error.message,
@@ -55,12 +49,21 @@ const insertMockCities = async (req, res) => {
 };
 
 const getRandomCity = async (req, res) => {
+  const getRandomNumberFromZeroToMax = max => Math.floor(Math.random() * Math.floor(max));
+  const getRandomItemFromArray = items => items[getRandomNumberFromZeroToMax(items.length)];
+
   try {
-    const cities = await findAllCities();
+    const cities = await CityModel.find();
+    if (!cities.length) {
+      res.status(404).json({
+        message: 'No cities found',
+      });
+    }
+
     const randomCity = getRandomItemFromArray(cities);
 
     res.status(200).json({
-      message: 'Random city:',
+      message: 'Random city received',
       data: randomCity,
     });
   } catch (error) {
@@ -71,7 +74,10 @@ const getRandomCity = async (req, res) => {
   }
 };
 
+
 export default {
   insertMockCities,
+  createCity,
+  getAllCities,
   getRandomCity,
 };
