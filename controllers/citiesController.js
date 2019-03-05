@@ -4,6 +4,7 @@ import citiesToInsert from '../mockCities';
 const insertMockCities = async (req, res) => {
   try {
     await CityModel.insertMany(citiesToInsert);
+
     res.status(201).json({
       message: 'Mock cities has been inserted',
     });
@@ -20,6 +21,7 @@ const createCity = async (req, res) => {
 
   try {
     const insertedCity = await newCity.save();
+
     res.status(201).json({
       message: 'City has been created',
       data: insertedCity.result,
@@ -74,10 +76,49 @@ const getRandomCity = async (req, res) => {
   }
 };
 
+const updateCity = async (req, res) => {
+  const { id } = req.params;
+  const updatedCity = req.body;
+
+  try {
+    const updateResult = await CityModel.findOneAndUpdate({ _id: id }, updatedCity, {
+      upsert: true,
+      new: true,
+    });
+
+    res.status(200).json({
+      message: 'City successfully updated',
+      data: updateResult,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Server error',
+      error: error.message,
+    });
+  }
+};
+
+const deleteCity = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await CityModel.findByIdAndRemove(id);
+
+    res.status(200).json({
+      message: 'City successfully deleted',
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Server error',
+      error: error.message,
+    });
+  }
+};
 
 export default {
   insertMockCities,
   createCity,
   getAllCities,
   getRandomCity,
+  updateCity,
+  deleteCity,
 };
