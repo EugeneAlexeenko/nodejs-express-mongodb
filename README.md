@@ -5,6 +5,6 @@
 ### Routes:
 
 
-`GET '/cities/fill` to insert dummy cities to database
+`POST '/cities/seed` to insert dummy cities to database
 
 `GET '/cities/random` to get random city
