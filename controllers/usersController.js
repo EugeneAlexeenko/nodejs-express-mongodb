@@ -16,10 +16,10 @@ const insertMockUsers = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const newCity = new UserModel(req.body);
+  const newUser = new UserModel(req.body);
 
   try {
-    const insertedUser = await newCity.save();
+    const insertedUser = await newUser.save();
     res.status(201).json({
       message: 'User has been created',
       data: insertedUser.result,
