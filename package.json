@@ -1,0 +1,40 @@
+{
+  "name": "nodejs-mongo-homework",
+  "version": "1.0.0",
+  "description": "nodejs express app",
+  "main": "index.js",
+  "scripts": {
+    "start-dev": "nodemon --exec babel-node --inspect --require ./node_modules/dotenv/config index.js ",
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "lint": "eslint ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && npm run lint"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "dotenv": "^6.2.0",
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.15.0",
+    "husky": "^1.3.1",
+    "jest": "24.0.0",
+    "nodemon": "1.18.9"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.16",
+    "morgan": "^1.9.1",
+    "winston": "^3.2.1"
+  }
+}
