@@ -1,0 +1,21 @@
+{
+  "name": "homework-8",
+  "version": "0.0.1",
+  "description": "This is a simple server, created for homework. ",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "mongoose": "^5.4.20",
+    "swagger-tools": "0.10.1"
+  }
+}

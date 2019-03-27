@@ -1,0 +1,362 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a simple server, created for homework.\n"
+  version: "0.0.1"
+  title: "Homework 8"
+tags:
+- name: "city"
+  description: "Operations about cities"
+- name: "user"
+  description: "Operations about users"
+- name: "product"
+  description: "Operations about products"
+schemes:
+- "http"
+paths:
+  /cities:
+    get:
+      tags:
+      - "city"
+      summary: "Get all cities"
+      description: "Returns a list of cities"
+      operationId: "getAllCities"
+      parameters: []
+      responses:
+        200:
+          description: "Successfully returned list of cities"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/City"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "City"
+    post:
+      tags:
+      - "city"
+      summary: "Add a new city"
+      description: "Add a new city to the collection"
+      operationId: "createCity"
+      parameters:
+      - in: "body"
+        name: "city"
+        required: false
+        schema:
+          $ref: "#/definitions/City"
+      responses:
+        201:
+          description: "City has been created"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "City"
+  /cities/random:
+    get:
+      tags:
+      - "city"
+      summary: "Get random city"
+      description: "Returns random city"
+      operationId: "getRandomCity"
+      parameters: []
+      responses:
+        200:
+          description: "Successfully returned random city"
+          schema:
+            $ref: "#/definitions/City"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "City"
+  /cities/{cityId}:
+    put:
+      tags:
+      - "city"
+      summary: "Update city"
+      operationId: "updateCity"
+      consumes:
+        - application/json
+      parameters:
+      - in: "path"
+        name: "cityId"
+        description: "City ID to update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "city"
+        description: "The city to update"
+        required: false
+        schema:
+          $ref: "#/definitions/City"
+      responses:
+        200:
+          description: "City successfully updated"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "City"
+    delete:
+      tags:
+      - "city"
+      summary: "Delete city"
+      operationId: "deleteCity"
+      produces:
+        - application/json
+      parameters:
+      - name: "cityId"
+        in: "path"
+        description: "City ID to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "City successfully deleted"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "City"
+  /users:
+    get:
+      tags:
+      - "user"
+      summary: "Get all users"
+      description: "Returns array of all users"
+      operationId: "getAllUsers"
+      parameters: []
+      responses:
+        200:
+          description: "Successfully returned list of users"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "User"
+    post:
+      tags:
+      - "user"
+      summary: "Add a new user"
+      operationId: "createUser"
+      parameters:
+      - in: "body"
+        name: "user"
+        required: false
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+          description: "City has been created"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "User"
+  /users/{userEmail}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by email"
+      description: "Returns user with provided email"
+      operationId: "getUserById"
+      parameters:
+      - name: "userEmail"
+        in: "path"
+        description: "email of user"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successfully returned list of users"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "User"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      operationId: "deleteUser"
+      parameters:
+      - name: "userEmail"
+        in: "path"
+        description: "email of user to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "User successfully deleted"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "User"
+  /products:
+    post:
+      tags:
+      - "product"
+      summary: "Add a new product"
+      operationId: "createProduct"
+      parameters:
+      - in: "body"
+        name: "product"
+        required: false
+        schema:
+          $ref: "#/definitions/Product"
+      responses:
+        201:
+          description: "Product has been created"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Product"
+  /products/{productName}:
+    get:
+      tags:
+      - "product"
+      summary: "Get product by name"
+      operationId: "getProduct"
+      parameters:
+      - name: "productName"
+        in: "path"
+        description: "Name of product"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Product successfully deleted"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Product"
+    delete:
+      tags:
+      - "product"
+      summary: "Delete product"
+      operationId: "deleteProduct"
+      parameters:
+      - name: "productName"
+        in: "path"
+        description: "name of product to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Product successfully deleted"
+        500:
+          description: "Server error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Product"
+definitions:
+  City:
+    type: "object"
+    required:
+    - "city"
+    properties:
+      city:
+        type: "string"
+      country:
+        type: "string"
+      capital:
+        type: "boolean"
+      lastModifiedDate:
+        type: "string"
+        format: "date-time"
+    example:
+      country: "country"
+      capital: true
+      city: "city"
+      lastModifiedDate: "2000-01-23T04:56:07.000+00:00"
+  User:
+    type: "object"
+    required:
+    - "email"
+    properties:
+      email:
+        type: "string"
+      username:
+        type: "string"
+      password:
+        type: "string"
+    example:
+      password: "password"
+      email: "email"
+      username: "username"
+  Product:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+      brand:
+        type: "string"
+      price:
+        type: "number"
+      lastModifiedDate:
+        type: "string"
+        format: "date-time"
+  inline_response_500:
+    properties:
+      message:
+        type: "string"
+responses:
+  500Error:
+    description: "Server error"
+    schema:
+      type: "object"
+      properties:
+        message:
+          type: "string"
