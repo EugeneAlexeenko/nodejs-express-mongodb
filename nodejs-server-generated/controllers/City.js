@@ -4,8 +4,8 @@ var utils = require('../utils/writer.js');
 var City = require('../service/CityService');
 
 module.exports.createCity = function createCity (req, res, next) {
-  var city = req.swagger.params['city'].value;
-  City.createCity(city)
+  var newCity = req.swagger.params['city'].value;
+  City.createCity(newCity)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -47,7 +47,8 @@ module.exports.getRandomCity = function getRandomCity (req, res, next) {
 
 module.exports.updateCity = function updateCity (req, res, next) {
   var cityId = req.swagger.params['cityId'].value;
-  City.updateCity(cityId)
+  var updatedCity = req.swagger.params['city'].value;
+  City.updateCity(cityId, updatedCity)
     .then(function (response) {
       utils.writeJson(res, response);
     })

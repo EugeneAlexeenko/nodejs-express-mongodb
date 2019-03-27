@@ -9,6 +9,28 @@ var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = 8080;
 
+
+// mongoose connection
+const mongoose = require('mongoose');
+
+const connectionUrl = 'mongodb://localhost:27017/homeworkdb';
+const connectionOptions = {
+  useNewUrlParser: true,
+};
+
+mongoose.set('debug', true);
+mongoose.connect(connectionUrl, connectionOptions);
+
+const db = mongoose.connection;
+
+db.on('error', () => {
+  console.log('Connection error');
+});
+
+db.once('open', () => {
+  console.log('Connected.');
+});
+
 // swaggerRouter configuration
 var options = {
   swaggerUi: path.join(__dirname, '/swagger.json'),

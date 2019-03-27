@@ -87,12 +87,20 @@ paths:
       - "city"
       summary: "Update city"
       operationId: "updateCity"
+      consumes:
+        - application/json
       parameters:
-      - name: "cityId"
-        in: "path"
-        description: "ID of city to update"
+      - in: "path"
+        name: "cityId"
+        description: "City ID to update"
         required: true
-        type: "integer"
+        type: "string"
+      - in: "body"
+        name: "city"
+        description: "The city to update"
+        required: false
+        schema:
+          $ref: "#/definitions/City"
       responses:
         200:
           description: "City successfully updated"
@@ -109,12 +117,14 @@ paths:
       - "city"
       summary: "Delete city"
       operationId: "deleteCity"
+      produces:
+        - application/json
       parameters:
       - name: "cityId"
         in: "path"
-        description: "ID of city to delete"
+        description: "City ID to delete"
         required: true
-        type: "integer"
+        type: "string"
       responses:
         200:
           description: "City successfully deleted"

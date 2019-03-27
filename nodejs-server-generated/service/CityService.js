@@ -1,5 +1,5 @@
 'use strict';
-
+const CityModel = require('../models/CityModel');
 
 /**
  * Add a new city
@@ -8,10 +8,14 @@
  * city City  (optional)
  * no response value expected for this operation
  **/
-exports.createCity = function(city) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
+exports.createCity = async function(city) {
+  const newCity = new CityModel(city);
+  const insertedCity = await newCity.save();
+
+  return {
+    message: 'City has been created',
+    data: insertedCity.result,
+  };
 }
 
 
@@ -21,10 +25,12 @@ exports.createCity = function(city) {
  * cityId Integer ID of city to delete
  * no response value expected for this operation
  **/
-exports.deleteCity = function(cityId) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
+exports.deleteCity = async function(cityId) {
+  await CityModel.findByIdAndRemove(cityId);
+
+  return {
+    message: 'City successfully deleted',
+  };
 }
 
 
@@ -34,27 +40,11 @@ exports.deleteCity = function(cityId) {
  *
  * returns List
  **/
-exports.getAllCities = function() {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "country" : "country",
-  "capital" : true,
-  "city" : "city",
-  "lastModifiedDate" : "2000-01-23T04:56:07.000+00:00"
-}, {
-  "country" : "country",
-  "capital" : true,
-  "city" : "city",
-  "lastModifiedDate" : "2000-01-23T04:56:07.000+00:00"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
+exports.getAllCities = async function() {
+  const cities = await CityModel.find({});
+
+  return cities;
+};
 
 
 /**
@@ -63,23 +53,24 @@ exports.getAllCities = function() {
  *
  * returns City
  **/
-exports.getRandomCity = function() {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "country" : "country",
-  "capital" : true,
-  "city" : "city",
-  "lastModifiedDate" : "2000-01-23T04:56:07.000+00:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
+exports.getRandomCity = async function() {
+  const getRandomNumberFromZeroToMax = max => Math.floor(Math.random() * Math.floor(max));
+  const getRandomItemFromArray = items => items[getRandomNumberFromZeroToMax(items.length)];
 
+  const cities = await CityModel.find();
+
+  if (!cities.length) {
+    return { message: 'No cities found' };
+  }
+
+  const randomCity = getRandomItemFromArray(cities);
+
+  return {
+    message: 'Random city received',
+    data: randomCity,
+  };
+}
+;
 
 /**
  * Update city
@@ -87,9 +78,15 @@ exports.getRandomCity = function() {
  * cityId Integer ID of city to update
  * no response value expected for this operation
  **/
-exports.updateCity = function(cityId) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.updateCity = async function(cityId, updatedCity) {
+  const updateResult = await CityModel.findOneAndUpdate({ _id: cityId }, updatedCity, {
+    upsert: true,
+    new: true,
   });
+
+  return {
+    message: 'City successfully updated',
+    data: updateResult,
+  };
 }
 
